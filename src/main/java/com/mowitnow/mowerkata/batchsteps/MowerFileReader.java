@@ -6,18 +6,15 @@ import com.mowitnow.mowerkata.model.Mower;
 import com.mowitnow.mowerkata.model.MowerData;
 import com.mowitnow.mowerkata.model.Position;
 import com.mowitnow.mowerkata.utils.MowerDataValidation;
-import com.mowitnow.mowerkata.utils.MowerDataValidationImpl;
 import org.springframework.batch.item.*;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.stereotype.Component;
 
 
 public class MowerFileReader implements ItemReader<MowerData> {
     private FlatFileItemReader<String> reader;
-    private MowerDataValidation moverDataValidator ;
+    private MowerDataValidation moverDataValidator;
     private boolean isLawnRead;
     private Lawn lawn;
     @Value("#{jobParameters['inputPath']}")
@@ -29,7 +26,8 @@ public class MowerFileReader implements ItemReader<MowerData> {
         reader.setResource(new FileSystemResource(inputPath));
         reader.setLineMapper(((line, lineNumber) -> line));
     }
-      @Override
+
+    @Override
     public MowerData read() throws Exception {
         reader.open(new ExecutionContext());
         if (!isLawnRead) {
