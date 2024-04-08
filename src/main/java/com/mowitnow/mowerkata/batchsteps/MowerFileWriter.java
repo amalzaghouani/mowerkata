@@ -4,12 +4,14 @@ import com.mowitnow.mowerkata.model.Mower;
 import org.springframework.batch.item.ItemWriter;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
 public class MowerFileWriter implements ItemWriter<Mower> {
 
     private String outputPath;
+
     public MowerFileWriter(String path) {
         outputPath = path;
     }
@@ -17,10 +19,20 @@ public class MowerFileWriter implements ItemWriter<Mower> {
 
     @Override
     public void write(List<? extends Mower> mowers) throws Exception {
-        try (PrintWriter writer = new PrintWriter((new FileWriter(outputPath, true)))) {
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter((new FileWriter(outputPath, true)));
             for (Mower mower : mowers) {
                 writer.println(mower.getPosition().getX() + " " +
                         mower.getPosition().getY() + " " + mower.getDirection());
+            }
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                writer.close();
             }
         }
     }

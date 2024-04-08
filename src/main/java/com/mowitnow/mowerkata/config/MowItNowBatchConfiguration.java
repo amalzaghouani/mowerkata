@@ -5,16 +5,19 @@ import com.mowitnow.mowerkata.model.MowerData;
 import com.mowitnow.mowerkata.batchsteps.MowerFileProcessor;
 import com.mowitnow.mowerkata.batchsteps.MowerFileReader;
 import com.mowitnow.mowerkata.batchsteps.MowerFileWriter;
-import com.mowitnow.mowerkata.service.MowerInstructionService;
+import com.mowitnow.mowerkata.service.MowerInstructionServiceImpl;
+import com.mowitnow.mowerkata.utils.MowerDataValidationImpl;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,19 +30,20 @@ public class MowItNowBatchConfiguration {
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
 
-    @Bean
-    public ItemReader<MowerData> itemReader() {
-        return new MowerFileReader("src\\main\\resources\\testFile.txt");
-    }
 
     @Bean
+    @StepScope
+    public ItemReader<MowerData> itemReader() {
+        return new MowerFileReader(new MowerDataValidationImpl());
+    }
+    @Bean
     public ItemProcessor<MowerData, Mower> itemProcessor() {
-        return new MowerFileProcessor();
+        return new MowerFileProcessor(new MowerInstructionServiceImpl());
     }
 
     @Bean
     public ItemWriter<Mower> itemWriter() {
-        return new MowerFileWriter("src\\main\\resources\\outputFile.txt");
+        return new MowerFileWriter("C:\\Users\\amalz\\OneDrive\\Bureau\\kata-sg\\outputFile.txt");
     }
 
     @Bean

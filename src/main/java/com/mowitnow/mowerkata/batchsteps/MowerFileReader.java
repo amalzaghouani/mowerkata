@@ -9,22 +9,27 @@ import com.mowitnow.mowerkata.utils.MowerDataValidation;
 import com.mowitnow.mowerkata.utils.MowerDataValidationImpl;
 import org.springframework.batch.item.*;
 import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.stereotype.Component;
+
 
 public class MowerFileReader implements ItemReader<MowerData> {
     private FlatFileItemReader<String> reader;
-    private MowerDataValidation moverDataValidator = new MowerDataValidationImpl();
+    private MowerDataValidation moverDataValidator ;
     private boolean isLawnRead;
     private Lawn lawn;
+    @Value("#{jobParameters['inputPath']}")
+    private String inputPath;
 
-    public MowerFileReader(String inputPath) {
+    public MowerFileReader(MowerDataValidation moverDataValidator) {
+        this.moverDataValidator = moverDataValidator;
         reader = new FlatFileItemReader<>();
         reader.setResource(new FileSystemResource(inputPath));
         reader.setLineMapper(((line, lineNumber) -> line));
     }
-
-
-    @Override
+      @Override
     public MowerData read() throws Exception {
         reader.open(new ExecutionContext());
         if (!isLawnRead) {
@@ -40,8 +45,7 @@ public class MowerFileReader implements ItemReader<MowerData> {
     }
 
     private MowerData getMowerData(String line) throws Exception {
-        if (!moverDataValidator.isValidMowerPositionLine(line))
-        {
+        if (!moverDataValidator.isValidMowerPositionLine(line)) {
             throw new InvalidFileFormatException("Mower Position line is not valid");
         }
         String[] mowerInitialPosition = line.split(" ");
@@ -50,8 +54,7 @@ public class MowerFileReader implements ItemReader<MowerData> {
         Position mowerPosition = new Position(x, y);
         char direction = mowerInitialPosition[2].charAt(0);
         String instructions = reader.read();
-        if (!moverDataValidator.isValidMowerInstructionLine(instructions))
-        {
+        if (!moverDataValidator.isValidMowerInstructionLine(instructions)) {
             throw new InvalidFileFormatException("Mower Instructions line is not valid");
         }
         Mower mower = new Mower(mowerPosition, direction, instructions);
@@ -60,8 +63,7 @@ public class MowerFileReader implements ItemReader<MowerData> {
 
     private void getLawnData() throws Exception {
         String lawnLine = reader.read();
-        if (!moverDataValidator.isValidLawnLine(lawnLine))
-        {
+        if (!moverDataValidator.isValidLawnLine(lawnLine)) {
             throw new InvalidFileFormatException("Lawn line is not valid");
         }
         String[] dimensions = lawnLine.split(" ");

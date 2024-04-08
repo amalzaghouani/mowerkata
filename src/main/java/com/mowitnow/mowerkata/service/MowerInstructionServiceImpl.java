@@ -1,5 +1,7 @@
 package com.mowitnow.mowerkata.service;
 
+import com.mowitnow.mowerkata.model.Direction;
+import com.mowitnow.mowerkata.model.Instruction;
 import com.mowitnow.mowerkata.model.Lawn;
 import com.mowitnow.mowerkata.model.Mower;
 import org.springframework.stereotype.Service;
@@ -9,11 +11,11 @@ public class MowerInstructionServiceImpl implements MowerInstructionService {
     @Override
     public void applyMowerInstructions(Mower mower, Lawn lawn) {
         for (char instruction : mower.getInstructions().toCharArray()) {
-            if (instruction == 'G') {
+            if (instruction == Instruction.LEFT.getValue()) {
                 turnLeft(mower);
-            } else if (instruction == 'D') {
+            } else if (instruction == Instruction.RIGHT.getValue()) {
                 turnRight(mower);
-            } else if (instruction == 'A') {
+            } else if (instruction == Instruction.MOVE.getValue()) {
                 move(mower, lawn);
             }
         }
@@ -23,16 +25,16 @@ public class MowerInstructionServiceImpl implements MowerInstructionService {
 
         switch (mower.getDirection()) {
             case 'N':
-                mower.setDirection('E');
+                mower.setDirection(Direction.EAST.getValue());
                 break;
             case 'E':
-                mower.setDirection('S');
+                mower.setDirection(Direction.SOUTH.getValue());
                 break;
             case 'S':
-                mower.setDirection('W');
+                mower.setDirection(Direction.WEST.getValue());
                 break;
             case 'W':
-                mower.setDirection('N');
+                mower.setDirection(Direction.NORTH.getValue());
                 break;
         }
     }
@@ -41,16 +43,16 @@ public class MowerInstructionServiceImpl implements MowerInstructionService {
 
         switch (mower.getDirection()) {
             case 'N':
-                mower.setDirection('W');
+                mower.setDirection(Direction.WEST.getValue());
                 break;
             case 'E':
-                mower.setDirection('N');
+                mower.setDirection(Direction.NORTH.getValue());
                 break;
             case 'S':
-                mower.setDirection('E');
+                mower.setDirection(Direction.EAST.getValue());
                 break;
             case 'W':
-                mower.setDirection('S');
+                mower.setDirection(Direction.SOUTH.getValue());
                 break;
         }
     }
