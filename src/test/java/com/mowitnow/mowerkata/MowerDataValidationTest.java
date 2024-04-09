@@ -1,10 +1,5 @@
 package com.mowitnow.mowerkata;
 
-import com.mowitnow.mowerkata.batchsteps.MowerFileProcessor;
-import com.mowitnow.mowerkata.model.Lawn;
-import com.mowitnow.mowerkata.model.Mower;
-import com.mowitnow.mowerkata.model.MowerData;
-import com.mowitnow.mowerkata.model.Position;
 import com.mowitnow.mowerkata.utils.MowerDataValidation;
 import com.mowitnow.mowerkata.utils.MowerDataValidationImpl;
 import org.junit.jupiter.api.Test;
@@ -15,18 +10,19 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MowerDataValidationTest {
-MowerDataValidation mowerDataValidator = new MowerDataValidationImpl();
+    MowerDataValidation mowerDataValidator = new MowerDataValidationImpl();
+
     @Test
     void isValidLawnLineTest() {
-        Map<String,Boolean> testCases =  getLawnTestCases();
-        for ( Map.Entry<String,Boolean> testCase:testCases.entrySet()
-             ) {
-            assertEquals(testCase.getValue(), mowerDataValidator.isValidLawnLine(testCase.getKey()) );
+        Map<String, Boolean> testCases = getLawnTestCases();
+        for (Map.Entry<String, Boolean> testCase : testCases.entrySet()
+        ) {
+            assertEquals(testCase.getValue(), mowerDataValidator.isValidLawnLine(testCase.getKey()));
         }
     }
 
-    private  Map<String,Boolean> getLawnTestCases() {
-        Map<String,Boolean> testCases = new HashMap<>();
+    private Map<String, Boolean> getLawnTestCases() {
+        Map<String, Boolean> testCases = new HashMap<>();
         testCases.put("5 5", true);
         testCases.put("5 7", true);
         testCases.put("5", false);
@@ -36,8 +32,8 @@ MowerDataValidation mowerDataValidator = new MowerDataValidationImpl();
         return testCases;
     }
 
-    private  Map<String,Boolean> getMowerInstructionTestCases() {
-        Map<String,Boolean> testCases = new HashMap<>();
+    private Map<String, Boolean> getMowerInstructionTestCases() {
+        Map<String, Boolean> testCases = new HashMap<>();
         testCases.put("AGDGDG", true);
         testCases.put("GADGAGD", true);
         testCases.put("5", false);
@@ -46,8 +42,9 @@ MowerDataValidation mowerDataValidator = new MowerDataValidationImpl();
         testCases.put(null, false);
         return testCases;
     }
-    private  Map<String,Boolean> getMowerPositionTestCases() {
-        Map<String,Boolean> testCases = new HashMap<>();
+
+    private Map<String, Boolean> getMowerPositionTestCases() {
+        Map<String, Boolean> testCases = new HashMap<>();
         testCases.put("5 5 N", true);
         testCases.put("5 7 S", true);
         testCases.put("5", false);
@@ -61,20 +58,20 @@ MowerDataValidation mowerDataValidator = new MowerDataValidationImpl();
 
     @Test
     void isValidPositionLineTest() {
-        Map<String,Boolean> testCases =  getMowerPositionTestCases();
-        for ( Map.Entry<String,Boolean> testCase:testCases.entrySet()
+        Map<String, Boolean> testCases = getMowerPositionTestCases();
+        for (Map.Entry<String, Boolean> testCase : testCases.entrySet()
         ) {
-            assertEquals(testCase.getValue(), mowerDataValidator.isValidMowerPositionLine(testCase.getKey()) );
+            assertEquals(testCase.getValue(), mowerDataValidator.isValidMowerPositionLine(testCase.getKey()));
         }
 
     }
 
     @Test
     void isValidInstructionLineTest() {
-        Map<String,Boolean> testCases =  getMowerInstructionTestCases();
-        for ( Map.Entry<String,Boolean> testCase:testCases.entrySet()
+        Map<String, Boolean> testCases = getMowerInstructionTestCases();
+        for (Map.Entry<String, Boolean> testCase : testCases.entrySet()
         ) {
-            assertEquals(testCase.getValue(), mowerDataValidator.isValidMowerInstructionLine(testCase.getKey()) );
+            assertEquals(testCase.getValue(), mowerDataValidator.isValidMowerInstructionLine(testCase.getKey()));
         }
 
     }

@@ -9,10 +9,10 @@ import java.util.Objects;
 @NoArgsConstructor
 public class Mower {
     private Position position;
-    private char direction;
+    private Direction direction;
     private String instructions;
 
-    public Mower(Position mowerPosition, char direction, String instructions) {
+    public Mower(Position mowerPosition, Direction direction, String instructions) {
         this.position = mowerPosition;
         this.direction = direction;
         this.instructions = instructions;

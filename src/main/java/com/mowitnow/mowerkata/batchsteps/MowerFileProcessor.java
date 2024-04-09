@@ -7,9 +7,9 @@ import com.mowitnow.mowerkata.service.MowerInstructionService;
 import org.springframework.batch.item.ItemProcessor;
 
 public class MowerFileProcessor implements ItemProcessor<MowerData, Mower> {
-    private MowerInstructionService mowerInstructionService ;
+    private MowerInstructionService mowerInstructionService;
 
-      public MowerFileProcessor(MowerInstructionService mowerInstructionService) {
+    public MowerFileProcessor(MowerInstructionService mowerInstructionService) {
         this.mowerInstructionService = mowerInstructionService;
     }
 
@@ -17,7 +17,7 @@ public class MowerFileProcessor implements ItemProcessor<MowerData, Mower> {
     public Mower process(MowerData mowerData) {
         Lawn lawn = mowerData.getLawn();
         Mower mower = mowerData.getMower();
-        mowerInstructionService.applyMowerInstructions(mower, lawn);
+        mowerInstructionService.applyMowerInstructions(new MowerData(lawn, mower));
         return mower;
     }
 }

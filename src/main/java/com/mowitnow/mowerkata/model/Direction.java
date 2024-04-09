@@ -12,5 +12,14 @@ public enum Direction {
         return value;
     }
 
+    public static Direction fromValue(char value) throws Exception {
+        for (Direction enumItem : Direction.values()) {
+            if (enumItem.getValue() == value) {
+                return enumItem;
+            }
+        }
+        throw new Exception("Direction value not valid");
+    }
+
 
 }

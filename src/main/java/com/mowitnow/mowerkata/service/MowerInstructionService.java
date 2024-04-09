@@ -1,9 +1,8 @@
 package com.mowitnow.mowerkata.service;
 
-import com.mowitnow.mowerkata.model.Lawn;
-import com.mowitnow.mowerkata.model.Mower;
+import com.mowitnow.mowerkata.model.MowerData;
 
 
 public interface MowerInstructionService {
-    void applyMowerInstructions(Mower mower, Lawn lawn);
+    void applyMowerInstructions(MowerData mowerData);
 }

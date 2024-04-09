@@ -1,22 +1,20 @@
 package com.mowitnow.mowerkata.service;
 
-import com.mowitnow.mowerkata.model.Direction;
-import com.mowitnow.mowerkata.model.Instruction;
-import com.mowitnow.mowerkata.model.Lawn;
-import com.mowitnow.mowerkata.model.Mower;
+import com.mowitnow.mowerkata.model.*;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MowerInstructionServiceImpl implements MowerInstructionService {
     @Override
-    public void applyMowerInstructions(Mower mower, Lawn lawn) {
+    public void applyMowerInstructions(MowerData mowerData) {
+        Mower mower = mowerData.getMower();
         for (char instruction : mower.getInstructions().toCharArray()) {
             if (instruction == Instruction.LEFT.getValue()) {
                 turnLeft(mower);
             } else if (instruction == Instruction.RIGHT.getValue()) {
                 turnRight(mower);
             } else if (instruction == Instruction.MOVE.getValue()) {
-                move(mower, lawn);
+                move(mower, mowerData.getLawn());
             }
         }
     }
@@ -24,17 +22,17 @@ public class MowerInstructionServiceImpl implements MowerInstructionService {
     private void turnRight(Mower mower) {
 
         switch (mower.getDirection()) {
-            case 'N':
-                mower.setDirection(Direction.EAST.getValue());
+            case NORTH:
+                mower.setDirection(Direction.EAST);
                 break;
-            case 'E':
-                mower.setDirection(Direction.SOUTH.getValue());
+            case EAST:
+                mower.setDirection(Direction.SOUTH);
                 break;
-            case 'S':
-                mower.setDirection(Direction.WEST.getValue());
+            case SOUTH:
+                mower.setDirection(Direction.WEST);
                 break;
-            case 'W':
-                mower.setDirection(Direction.NORTH.getValue());
+            case WEST:
+                mower.setDirection(Direction.NORTH);
                 break;
         }
     }
@@ -42,17 +40,17 @@ public class MowerInstructionServiceImpl implements MowerInstructionService {
     private void turnLeft(Mower mower) {
 
         switch (mower.getDirection()) {
-            case 'N':
-                mower.setDirection(Direction.WEST.getValue());
+            case NORTH:
+                mower.setDirection(Direction.WEST);
                 break;
-            case 'E':
-                mower.setDirection(Direction.NORTH.getValue());
+            case EAST:
+                mower.setDirection(Direction.NORTH);
                 break;
-            case 'S':
-                mower.setDirection(Direction.EAST.getValue());
+            case SOUTH:
+                mower.setDirection(Direction.EAST);
                 break;
-            case 'W':
-                mower.setDirection(Direction.SOUTH.getValue());
+            case WEST:
+                mower.setDirection(Direction.SOUTH);
                 break;
         }
     }
@@ -64,19 +62,19 @@ public class MowerInstructionServiceImpl implements MowerInstructionService {
         int lawnHeight = lawn.getHeight();
         int lawnWidth = lawn.getWidth();
         switch (mower.getDirection()) {
-            case 'N':
+            case NORTH:
                 if (y < lawnHeight)
                     mower.getPosition().setY(y + 1);
                 break;
-            case 'E':
+            case EAST:
                 if (x < lawnWidth)
                     mower.getPosition().setX(x + 1);
                 break;
-            case 'S':
+            case SOUTH:
                 if (y > 0)
                     mower.getPosition().setY(y - 1);
                 break;
-            case 'W':
+            case WEST:
                 if (x > 0)
                     mower.getPosition().setX(x - 1);
                 break;

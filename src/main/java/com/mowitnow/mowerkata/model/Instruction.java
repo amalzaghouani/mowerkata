@@ -2,7 +2,7 @@ package com.mowitnow.mowerkata.model;
 
 public enum Instruction {
     LEFT('G'), RIGHT('D'), MOVE('A');
-    private char value;
+    private final char value;
 
     Instruction(char value) {
         this.value = value;

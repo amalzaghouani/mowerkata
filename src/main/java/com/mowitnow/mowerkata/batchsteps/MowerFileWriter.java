@@ -18,16 +18,14 @@ public class MowerFileWriter implements ItemWriter<Mower> {
 
 
     @Override
-    public void write(List<? extends Mower> mowers) throws Exception {
+    public void write(List<? extends Mower> mowers) {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter((new FileWriter(outputPath, true)));
             for (Mower mower : mowers) {
                 writer.println(mower.getPosition().getX() + " " +
-                        mower.getPosition().getY() + " " + mower.getDirection());
+                        mower.getPosition().getY() + " " + mower.getDirection().getValue());
             }
-            writer.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

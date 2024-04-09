@@ -1,44 +1,45 @@
 package com.mowitnow.mowerkata.batchsteps;
 
 import com.mowitnow.mowerkata.exception.InvalidFileFormatException;
-import com.mowitnow.mowerkata.model.Lawn;
-import com.mowitnow.mowerkata.model.Mower;
-import com.mowitnow.mowerkata.model.MowerData;
-import com.mowitnow.mowerkata.model.Position;
+import com.mowitnow.mowerkata.model.*;
 import com.mowitnow.mowerkata.utils.MowerDataValidation;
 import org.springframework.batch.item.*;
 import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
-
 
 public class MowerFileReader implements ItemReader<MowerData> {
     private FlatFileItemReader<String> reader;
     private MowerDataValidation moverDataValidator;
     private boolean isLawnRead;
     private Lawn lawn;
-    @Value("#{jobParameters['inputPath']}")
-    private String inputPath;
 
-    public MowerFileReader(MowerDataValidation moverDataValidator) {
+    public MowerFileReader(MowerDataValidation moverDataValidator, String inputFilePath) {
         this.moverDataValidator = moverDataValidator;
         reader = new FlatFileItemReader<>();
-        reader.setResource(new FileSystemResource(inputPath));
+        reader.setResource(new FileSystemResource(inputFilePath));
         reader.setLineMapper(((line, lineNumber) -> line));
     }
 
     @Override
     public MowerData read() throws Exception {
-        reader.open(new ExecutionContext());
-        if (!isLawnRead) {
-            getLawnData();
-        }
-        String line = reader.read();
-        if (line != null) {
-            return getMowerData(line);
-        } else {
-            reader.close();
-            return null;
+        try {
+            reader.open(new ExecutionContext());
+            if (!isLawnRead) {
+                getLawnData();
+            }
+            String line = reader.read();
+            if (line != null) {
+                return getMowerData(line);
+            } else {
+                reader.close();
+                return null;
+            }
+        } catch (Exception e) {
+            if (reader != null) {
+                reader.close();
+            }
+            e.printStackTrace();
+            throw e;
         }
     }
 
@@ -55,12 +56,16 @@ public class MowerFileReader implements ItemReader<MowerData> {
         if (!moverDataValidator.isValidMowerInstructionLine(instructions)) {
             throw new InvalidFileFormatException("Mower Instructions line is not valid");
         }
-        Mower mower = new Mower(mowerPosition, direction, instructions);
+
+        Mower mower = new Mower(mowerPosition, Direction.fromValue(direction), instructions);
         return new MowerData(lawn, mower);
     }
 
     private void getLawnData() throws Exception {
         String lawnLine = reader.read();
+        if (lawnLine == null) {
+            throw new InvalidFileFormatException("File is empty");
+        }
         if (!moverDataValidator.isValidLawnLine(lawnLine)) {
             throw new InvalidFileFormatException("Lawn line is not valid");
         }

@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.mowitnow</groupId>
     <artifactId>mowerkata</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>mowerkata</name>
     <description>Demo project for mower kata</description>
     <properties>
